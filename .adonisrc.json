@@ -3,22 +3,28 @@
   "commands": [
     "./commands",
     "@adonisjs/core/build/commands/index.js",
-    "@adonisjs/repl/build/commands"
+    "@adonisjs/repl/build/commands",
+    "@adonisjs/lucid/build/commands"
   ],
-  "exceptionHandlerNamespace": "App/Exceptions/Handler",
+  "exceptionHandlerNamespace": "App/shared/exceptions/handler",
   "aliases": {
-    "App": "app",
+    "App": "apps",
     "Config": "config",
     "Database": "database",
-    "Contracts": "contracts"
+    "Contracts": "contracts",
+    "Services": "services",
+    "Domains": "domains"
   },
   "preloads": [
     "./start/routes",
     "./start/kernel"
   ],
   "providers": [
-    "./providers/AppProvider",
-    "@adonisjs/core"
+    "./providers/app_provider",
+    "@adonisjs/core",
+    "@adonisjs/lucid",
+    "@adonisjs/auth",
+    "@adonisjs/ally"
   ],
   "aceProviders": [
     "@adonisjs/repl"

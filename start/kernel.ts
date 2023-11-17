@@ -22,8 +22,8 @@ import Server from '@ioc:Adonis/Core/Server'
 */
 Server.middleware.register([
   () => import('@ioc:Adonis/Core/BodyParser'),
-  () => import('apps/shared/middlewares/set-authorization-header'),
-  () => import('apps/shared/middlewares/silent-auth')
+  () => import('App/shared/middlewares/set-authorization-header'),
+  () => import('App/shared/middlewares/silent-auth')
 ])
 
 /*
@@ -43,5 +43,5 @@ Server.middleware.register([
 |
 */
 Server.middleware.registerNamed({
-  auth: () => import('apps/shared/middlewares/auth'),
+  auth: () => import('App/shared/middlewares/auth'),
 })

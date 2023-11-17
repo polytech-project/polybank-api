@@ -33,7 +33,7 @@ export default class AuthenticationController {
 
     if (!driverUser.email) {
       return response.badRequest('Your account must have a verified email address in order to login')
-    }
+    }    
 
     const user = await User.firstOrCreate({ email: driverUser.email }, {
       username: driverUser.name,

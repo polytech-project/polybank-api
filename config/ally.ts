@@ -27,7 +27,7 @@ const allyConfig: AllyConfig = {
 		driver: 'github',
 		clientId: Env.get('GITHUB_CLIENT_ID'),
 		clientSecret: Env.get('GITHUB_CLIENT_SECRET'),
-		callbackUrl: 'http://localhost:3333/github/callback',
+		callbackUrl: 'http://localhost:3333/authentication/github/callback',
 	},
 	/*
 	|--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ const allyConfig: AllyConfig = {
 		driver: 'google',
 		clientId: Env.get('GOOGLE_CLIENT_ID'),
 		clientSecret: Env.get('GOOGLE_CLIENT_SECRET'),
-		callbackUrl: 'http://localhost:3333/google/callback',
+		callbackUrl: 'http://localhost:3333/authentication/google/callback',
 	},
 	/*
 	|--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ const allyConfig: AllyConfig = {
 		driver: 'discord',
 		clientId: Env.get('DISCORD_CLIENT_ID'),
 		clientSecret: Env.get('DISCORD_CLIENT_SECRET'),
-		callbackUrl: 'http://localhost:3333/discord/callback',
+		callbackUrl: 'http://localhost:3333/authentication/discord/callback',
 	},
 }
 

@@ -23,6 +23,12 @@
       ],
       "Database/*": [
         "./database/*"
+      ],
+      "Domains/*": [
+        "./domains/*"
+      ],
+      "Services/*": [
+        "./services/*"
       ]
     },
     "types": [

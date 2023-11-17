@@ -9,7 +9,7 @@ export default class AppProvider {
 
     this.app.container.singleton('Adonis/Addons/Architect', () => {
       return new Architect(this.app)
-    })
+    })    
   }
 
   public async boot () {

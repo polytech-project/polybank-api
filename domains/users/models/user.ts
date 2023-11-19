@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { column, BaseModel, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
+import { column, BaseModel, beforeCreate, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { randomUUID } from "node:crypto"
+import Role from './role'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -23,6 +24,9 @@ export default class User extends BaseModel {
 
   @column()
   public isVerified: boolean
+
+  @manyToMany(() => Role)
+  public roles: ManyToMany<typeof Role>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

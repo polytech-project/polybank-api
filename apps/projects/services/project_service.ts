@@ -1,5 +1,14 @@
 import Project from 'Domains/projects/models/project'
 import Logger from '@ioc:Adonis/Core/Logger'
+import User from 'Domains/users/models/user'
+
+
+export interface ProjectStoreContract {
+  title: string
+  description?: string
+  device?: string
+  user: User
+}
 
 export default class ProjectService {
   public static async getProjectsByUserId (userId: string): Promise<Project[] | undefined> {
@@ -12,6 +21,31 @@ export default class ProjectService {
       return projects
     } catch (error) {
       Logger.warn(error)
+    }
+  }
+
+  public static async getProjectById (projectId: string): Promise<Project | null> {
+    try {
+      const project = await Project.query()
+        .where('id', projectId)
+        //.preload('users')
+        .firstOrFail()
+      
+      return project
+    } catch (error) {
+      Logger.warn(error)
+      return null
+    }
+  }
+
+  public static async createProject (data: ProjectStoreContract): Promise<Project | null> {
+    try {
+      const project = await Project.create(data)
+
+      return project
+    } catch (error) {
+      Logger.warn(error)
+      return null
     }
   }
 }

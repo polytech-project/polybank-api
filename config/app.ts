@@ -37,7 +37,7 @@ export const appKey: string = Env.get('APP_KEY')
 |
 */
 export const http: ServerConfig = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Allow method spoofing
   |--------------------------------------------------------------------------
@@ -48,16 +48,16 @@ export const http: ServerConfig = {
   | so on.
   |
   */
-  allowMethodSpoofing: false,
+	allowMethodSpoofing: false,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Subdomain offset
   |--------------------------------------------------------------------------
   */
-  subdomainOffset: 2,
+	subdomainOffset: 2,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Request Ids
   |--------------------------------------------------------------------------
@@ -66,9 +66,9 @@ export const http: ServerConfig = {
   | HTTP request and set it as `x-request-id` header.
   |
   */
-  generateRequestId: false,
+	generateRequestId: false,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Trusting proxy servers
   |--------------------------------------------------------------------------
@@ -77,9 +77,9 @@ export const http: ServerConfig = {
   | headers.
   |
   */
-  trustProxy: proxyAddr.compile('loopback'),
+	trustProxy: proxyAddr.compile('loopback'),
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Generating Etag
   |--------------------------------------------------------------------------
@@ -87,30 +87,30 @@ export const http: ServerConfig = {
   | Whether or not to generate an etag for every response.
   |
   */
-  etag: false,
+	etag: false,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | JSONP Callback
   |--------------------------------------------------------------------------
   */
-  jsonpCallbackName: 'callback',
+	jsonpCallbackName: 'callback',
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Cookie settings
   |--------------------------------------------------------------------------
   */
-  cookie: {
-    domain: '',
-    path: '/',
-    maxAge: '2h',
-    httpOnly: true,
-    secure: false,
-    sameSite: false,
-  },
+	cookie: {
+		domain: '',
+		path: '/',
+		maxAge: '2h',
+		httpOnly: true,
+		secure: false,
+		sameSite: false,
+	},
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Force Content Negotiation
   |--------------------------------------------------------------------------
@@ -126,7 +126,7 @@ export const http: ServerConfig = {
   | client to set the header explicitly.
   |
   */
-  forceContentNegotiationTo: 'application/json',
+	forceContentNegotiationTo: 'application/json',
 }
 
 /*
@@ -135,7 +135,7 @@ export const http: ServerConfig = {
 |--------------------------------------------------------------------------
 */
 export const logger: LoggerConfig = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Application name
   |--------------------------------------------------------------------------
@@ -147,9 +147,9 @@ export const logger: LoggerConfig = {
   | reading the `name` property from the `package.json` file.
   |
   */
-  name: Env.get('APP_NAME'),
+	name: Env.get('APP_NAME'),
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Toggle logger
   |--------------------------------------------------------------------------
@@ -157,9 +157,9 @@ export const logger: LoggerConfig = {
   | Enable or disable logger application wide
   |
   */
-  enabled: true,
+	enabled: true,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Logging level
   |--------------------------------------------------------------------------
@@ -169,9 +169,9 @@ export const logger: LoggerConfig = {
   | at deployment level and not code level.
   |
   */
-  level: Env.get('LOG_LEVEL', 'info'),
+	level: Env.get('LOG_LEVEL', 'info'),
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Pretty print
   |--------------------------------------------------------------------------
@@ -180,7 +180,7 @@ export const logger: LoggerConfig = {
   | can have huge impact on performance.
   |
   */
-  prettyPrint: Env.get('NODE_ENV') === 'development',
+	prettyPrint: Env.get('NODE_ENV') === 'development',
 }
 
 /*
@@ -189,7 +189,7 @@ export const logger: LoggerConfig = {
 |--------------------------------------------------------------------------
 */
 export const profiler: ProfilerConfig = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Toggle profiler
   |--------------------------------------------------------------------------
@@ -197,9 +197,9 @@ export const profiler: ProfilerConfig = {
   | Enable or disable profiler
   |
   */
-  enabled: true,
+	enabled: true,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Blacklist actions/row labels
   |--------------------------------------------------------------------------
@@ -208,9 +208,9 @@ export const profiler: ProfilerConfig = {
   | getting profiled.
   |
   */
-  blacklist: [],
+	blacklist: [],
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Whitelist actions/row labels
   |--------------------------------------------------------------------------
@@ -219,7 +219,7 @@ export const profiler: ProfilerConfig = {
   | the profiler. When whitelist is defined, then `blacklist` is ignored.
   |
   */
-  whitelist: [],
+	whitelist: [],
 }
 
 /*
@@ -231,5 +231,4 @@ export const profiler: ProfilerConfig = {
 | to the default config https://git.io/JT0WE
 |
 */
-export const validator: ValidatorConfig = {
-}
+export const validator: ValidatorConfig = {}

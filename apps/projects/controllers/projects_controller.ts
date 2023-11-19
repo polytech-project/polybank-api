@@ -1,75 +1,76 @@
-import { type HttpContextContract } from "@ioc:Adonis/Core/HttpContext"
-import Project from "Domains/projects/models/project"
-import ProjectService from "../services/project_service"
-import { StoreValidator, UpdateValidator } from "../validators/project_validator"
-import User from "Domains/users/models/user"
+import { type HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Project from 'Domains/projects/models/project'
+import ProjectService from '../services/project_service'
+import { StoreValidator, UpdateValidator } from '../validators/project_validator'
+import User from 'Domains/users/models/user'
 
 export default class ProjectsController {
-  public async index ({ request, response }: HttpContextContract) {
-    const { userId } = request.qs()
+	public async index({ request, response }: HttpContextContract) {
+		const { userId } = request.qs()
 
-    if (userId) {
-      // bouncer authorize 'projects', 'view'
-      const projects = await ProjectService.getProjectsByUserId(userId)
+		if (userId) {
+			// bouncer authorize 'projects', 'view'
+			const projects = await ProjectService.getProjectsByUserId(userId)
 
-      return response.send(projects)
-    }
+			return response.send(projects)
+		}
 
-    // bouncer authorize 'projects', 'view' 
-    return Project.query()
-  }
+		// bouncer authorize 'projects', 'view'
+		return Project.query()
+	}
 
-  public async show ({ params, response }: HttpContextContract) {
-    // bouncer authorize 'projects', 'view'
-    const project = await ProjectService.getProjectById(params.id)
+	public async show({ params, response }: HttpContextContract) {
+		// bouncer authorize 'projects', 'view'
+		const project = await ProjectService.getProjectById(params.id)
 
-    if (!project) {
-      return response.notFound()
-    }
+		if (!project) {
+			return response.notFound()
+		}
 
-    return response.send(project)
-  }
-  
-  public async store ({ request, response, auth }: HttpContextContract) {
-    const data = await request.validate(StoreValidator)
-    const user = auth.user as User
+		return response.send(project)
+	}
 
-    const project = await ProjectService.createProject({
-      ...data, user
-    })
+	public async store({ request, response, auth }: HttpContextContract) {
+		const data = await request.validate(StoreValidator)
+		const user = auth.user as User
 
-    if (!project) {
-      return response.badRequest()
-    }
+		const project = await ProjectService.createProject({
+			...data,
+			user,
+		})
 
-    return response.created(project)
-  }
+		if (!project) {
+			return response.badRequest()
+		}
 
-  public async update ({ request, params, response }: HttpContextContract) {
-    const data = await request.validate(UpdateValidator)
-    const project = await ProjectService.getProjectById(params.id)
+		return response.created(project)
+	}
 
-    if (!project) {
-      return response.notFound()
-    }
+	public async update({ request, params, response }: HttpContextContract) {
+		const data = await request.validate(UpdateValidator)
+		const project = await ProjectService.getProjectById(params.id)
 
-    const newProject = await ProjectService.updateProject(data, project)
+		if (!project) {
+			return response.notFound()
+		}
 
-    return response.send(newProject)
-  }
+		const newProject = await ProjectService.updateProject(data, project)
 
-  public async delete ({ params, response }: HttpContextContract) {
-    const project = await ProjectService.getProjectById(params.id)
+		return response.send(newProject)
+	}
 
-    if (!project) {
-      return response.notFound()
-    }
+	public async delete({ params, response }: HttpContextContract) {
+		const project = await ProjectService.getProjectById(params.id)
 
-    await project.delete()
+		if (!project) {
+			return response.notFound()
+		}
 
-    return response.send({
-      message: 'Project deleted successfully',
-      project
-    })
-  }
+		await project.delete()
+
+		return response.send({
+			message: 'Project deleted successfully',
+			project,
+		})
+	}
 }

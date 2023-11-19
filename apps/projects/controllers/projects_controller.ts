@@ -1,7 +1,7 @@
 import { type HttpContextContract } from "@ioc:Adonis/Core/HttpContext"
 import Project from "Domains/projects/models/project"
 import ProjectService from "../services/project_service"
-import { StoreValidator } from "../validators/project_validator"
+import { StoreValidator, UpdateValidator } from "../validators/project_validator"
 import User from "Domains/users/models/user"
 
 export default class ProjectsController {
@@ -33,7 +33,7 @@ export default class ProjectsController {
   public async store ({ request, response, auth }: HttpContextContract) {
     const data = await request.validate(StoreValidator)
     const user = auth.user as User
-    
+
     const project = await ProjectService.createProject({
       ...data, user
     })
@@ -45,4 +45,31 @@ export default class ProjectsController {
     return response.created(project)
   }
 
+  public async update ({ request, params, response }: HttpContextContract) {
+    const data = await request.validate(UpdateValidator)
+    const project = await ProjectService.getProjectById(params.id)
+
+    if (!project) {
+      return response.notFound()
+    }
+
+    const newProject = await ProjectService.updateProject(data, project)
+
+    return response.send(newProject)
+  }
+
+  public async delete ({ params, response }: HttpContextContract) {
+    const project = await ProjectService.getProjectById(params.id)
+
+    if (!project) {
+      return response.notFound()
+    }
+
+    await project.delete()
+
+    return response.send({
+      message: 'Project deleted successfully',
+      project
+    })
+  }
 }

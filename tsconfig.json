@@ -37,7 +37,8 @@
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/lucid",
       "@adonisjs/auth",
-      "@adonisjs/ally"
+      "@adonisjs/ally",
+      "@adonisjs/bouncer"
     ]
   }
 }

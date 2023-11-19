@@ -10,6 +10,12 @@ export interface ProjectStoreContract {
   user: User
 }
 
+export interface ProjectUpdateContract {
+  title?: string
+  description?: string
+  users?: string[]
+}
+
 export default class ProjectService {
   public static async getProjectsByUserId (userId: string): Promise<Project[] | undefined> {
     try {
@@ -41,6 +47,21 @@ export default class ProjectService {
   public static async createProject (data: ProjectStoreContract): Promise<Project | null> {
     try {
       const project = await Project.create(data)
+
+      return project
+    } catch (error) {
+      Logger.warn(error)
+      return null
+    }
+  }
+
+  public static async updateProject (data: any, project: Project) {
+    try {
+      await project.merge(data).save()
+
+      if (data.users) {
+        await project.related('users').sync(data.users)
+      }
 
       return project
     } catch (error) {

@@ -27,7 +27,8 @@
     "@adonisjs/lucid",
     "@adonisjs/auth",
     "@adonisjs/ally",
-    "@adonisjs/bouncer"
+    "@adonisjs/bouncer",
+    "@adonisjs/redis"
   ],
   "aceProviders": [
     "@adonisjs/repl"

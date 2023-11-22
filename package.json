@@ -42,6 +42,7 @@
     "@adonisjs/bouncer": "^2.3.0",
     "@adonisjs/core": "^5.9.0",
     "@adonisjs/lucid": "^18.4.2",
+    "@adonisjs/redis": "^7.3.4",
     "@adonisjs/repl": "^3.1.11",
     "luxon": "^3.4.4",
     "pg": "^8.11.3",

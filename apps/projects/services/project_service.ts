@@ -16,13 +16,14 @@ export interface ProjectUpdateContract {
 }
 
 export default class ProjectService {
-	public static async getProjectsByUserId(userId: string): Promise<Project[] | undefined> {
+	public static async getProjectsByUserId(userId: string, page?: number, size?: number): Promise<Project[] | undefined> {
 		try {
-			const projects = await Project.query().whereHas('users', (query) => {
-				query.where('user_id', userId)
-			})
-
-			return projects
+      return await Project
+        .query()
+        .whereHas('users', (query) => {
+          query.where('user_id', userId)
+        })
+        .paginate(page || 1, size || 10)
 		} catch (error) {
 			Logger.warn(error)
 		}
@@ -30,12 +31,10 @@ export default class ProjectService {
 
 	public static async getProjectById(projectId: string): Promise<Project | null> {
 		try {
-			const project = await Project.query()
-				.where('id', projectId)
-				//.preload('users')
-				.firstOrFail()
-
-			return project
+      return await Project.query()
+        .where('id', projectId)
+        //.preload('users')
+        .firstOrFail()
 		} catch (error) {
 			Logger.warn(error)
 			return null

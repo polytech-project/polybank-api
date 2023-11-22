@@ -10,10 +10,12 @@ export default class AuthenticationController {
 	}
 
 	public async redirect({ ally, params }: HttpContextContract) {
-		return ally.use(params.driver).redirect()
+		return ally
+      .use(params.driver)
+      .redirect()
 	}
 
-	public async callback({ ally, auth, response, params }: HttpContextContract) {
+	public async callback({ ally, auth, response, params, request }: HttpContextContract) {
 		const driver = ally.use(params.driver) as GithubDriverContract | GoogleDriverContract | GoogleDriverContract
 
 		if (driver.accessDenied()) {
@@ -51,6 +53,6 @@ export default class AuthenticationController {
 			secure: true,
 		})
 
-		response.redirect().toPath('http://localhost:4200')
+		response.redirect().toPath(request.header('referer') || 'http://localhost:4200')
 	}
 }

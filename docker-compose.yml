@@ -5,8 +5,20 @@ networks:
     driver: bridge
     name: polybank
 
-
 services:
+  rabbitmq:
+    image: rabbitmq:3.8.9-management
+    container_name: rabbitmq_polybank
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_ERLANG_COOKIE: 'SWQOKODSQALRPCLNMEQG'
+      RABBITMQ_DEFAULT_USER: 'user'
+      RABBITMQ_DEFAULT_PASS: 'password'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - polybank
   postgres:
     container_name: postgres_polybank
     image: postgres:13

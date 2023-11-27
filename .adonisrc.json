@@ -19,7 +19,8 @@
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    "./start/bouncer"
+    "./start/bouncer",
+    "./start/rabbit"
   ],
   "providers": [
     "./providers/app_provider",
@@ -28,7 +29,8 @@
     "@adonisjs/auth",
     "@adonisjs/ally",
     "@adonisjs/bouncer",
-    "@adonisjs/redis"
+    "@adonisjs/redis",
+    "adonis-rabbit"
   ],
   "aceProviders": [
     "@adonisjs/repl"

@@ -46,7 +46,9 @@ export default class AuthenticationController {
 			}
 		)
 
-		const opaqueTokenContract = await auth.use('api').login(user)
+		const opaqueTokenContract = await auth.use('api').login(user, {
+			expiresIn: '1day',
+		})
 
 		response.cookie('token', opaqueTokenContract.token, {
 			httpOnly: true,

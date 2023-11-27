@@ -10,7 +10,10 @@ export default () => {
 				Route.post('/', 'projects_controller.store').as('projects.store')
 				Route.put('/:id', 'projects_controller.update').as('projects.update')
 				Route.delete('/:id', 'projects_controller.destroy').as('projects.destroy')
-			}).prefix('/projects')
+			})
+			Route.group(() => {
+				Route.get('/', 'transactions_controller.index').as('transactions.index')
+			}).prefix('/:projectId')
 		}).middleware('auth')
 	}).namespace('App/projects/controllers')
 }

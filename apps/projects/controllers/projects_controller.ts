@@ -1,25 +1,24 @@
 import { type HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Project from 'Domains/projects/models/project'
+//import Logger from '@ioc:Adonis/Core/Logger'
 import ProjectService from '../services/project_service'
 import { StoreValidator, UpdateValidator } from '../validators/project_validator'
 import User from 'Domains/users/models/user'
 
 export default class ProjectsController {
 	public async index({ request, response, bouncer, auth }: HttpContextContract) {
-		const { onlyUser, page = 1, size = 10 } = request.qs()
+		const { onlyUser, page = 1, size = 10, transactions } = request.qs()
     const user = auth.user as User
 
 		if (onlyUser) {
-			const projects = await ProjectService.getProjectsByUserId(user.id, page, size)
-
+			const projects = await ProjectService.getProjects(page, size, transactions ? true : false, user.id)
+			
 			return response.send(projects)
 		}
 
     await bouncer.with('ProjectPolicy').authorize('view')
+		const projects = await ProjectService.getProjects(page, size, transactions ? true : false)
 
-		return Project
-      .query()
-      .paginate(page, size)
+		return response.send(projects)
 	}
 
 	public async show({ params, response, bouncer }: HttpContextContract) {

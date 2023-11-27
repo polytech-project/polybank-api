@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { column, BaseModel, beforeCreate, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { randomUUID } from 'node:crypto'
 import Role from './role'
+import Project from 'Domains/projects/models/project'
 
 export default class User extends BaseModel {
 	@column({ isPrimary: true })
@@ -27,6 +28,9 @@ export default class User extends BaseModel {
 
 	@manyToMany(() => Role)
 	public roles: ManyToMany<typeof Role>
+
+	@manyToMany(() => Project)
+	public projects: ManyToMany<typeof Project>
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime

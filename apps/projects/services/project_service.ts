@@ -20,12 +20,29 @@ export default class ProjectService {
 		try {
       return await Project
         .query()
-        .whereHas('users', (query) => {
-          query.where('user_id', userId)
-        })
+				.whereHas('users', (query) => {
+					query.where('user_id', userId)
+				})
         .paginate(page || 1, size || 10)
 		} catch (error) {
 			Logger.warn(error)
+		}
+	}
+
+	public static async getProjects(page: number, size: number, transactions?: boolean, userId?: string) {
+		try {			
+			return await Project.query()
+				.if(transactions, (query) => {
+					query.preload('transactions')
+				})
+				.if(userId, (query) => {
+					query.whereHas('users', (query) => {
+						query.where('user_id', userId!)
+					})
+				})
+				.paginate(page, size)
+		} catch (error) {
+			Logger.error(error)
 		}
 	}
 
@@ -43,7 +60,12 @@ export default class ProjectService {
 
 	public static async createProject(data: ProjectStoreContract): Promise<Project | null> {
 		try {
-			const project = await Project.create(data)
+			const project = await Project.create({
+				title: data.title,
+				description: data.description,
+				device: data.device,
+				ownerId: data.user.id,
+			})
 
 			return project
 		} catch (error) {

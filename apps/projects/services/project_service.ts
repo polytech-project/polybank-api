@@ -15,50 +15,37 @@ export interface ProjectUpdateContract {
 	users?: string[]
 }
 
-export default class ProjectService {
-	public static async getProjectsByUserId(userId: string, page?: number, size?: number): Promise<Project[] | undefined> {
-		try {
-      return await Project
-        .query()
-				.whereHas('users', (query) => {
-					query.where('user_id', userId)
-				})
-        .paginate(page || 1, size || 10)
-		} catch (error) {
-			Logger.warn(error)
-		}
-	}
+class ProjectService {
+  constructor() {}
 
-	public static async getProjects(page: number, size: number, transactions?: boolean, userId?: string) {
-		try {			
-			return await Project.query()
-				.if(transactions, (query) => {
-					query.preload('transactions')
-				})
-				.if(userId, (query) => {
-					query.whereHas('users', (query) => {
-						query.where('user_id', userId!)
-					})
-				})
-				.paginate(page, size)
-		} catch (error) {
-			Logger.error(error)
-		}
-	}
+  public async findAll(page: number, size: number, transactions?: boolean) {
+    return await Project
+      .query()
+      .if(transactions, (query) => {
+        query.preload('transactions')
+      })
+      .paginate(page || 1, size || 1)
+  }
 
-	public static async getProjectById(projectId: string): Promise<Project | null> {
-		try {
-      return await Project.query()
-        .where('id', projectId)
-        //.preload('users')
-        .firstOrFail()
-		} catch (error) {
-			Logger.warn(error)
-			return null
-		}
-	}
+  public async findByUserId(userId: string, page: number, size: number, transactions?: boolean) {
+    return await Project
+      .query()
+      .whereHas('users', (query) => {
+        query.where('user_id', userId)
+      })
+      .if(transactions, (query) => {
+        query.preload('transactions')
+      })
+      .paginate(page, size)
+  }
 
-	public static async createProject(data: ProjectStoreContract): Promise<Project | null> {
+  public async findById(projectId: string) {
+    return Project.query()
+      .where('id', projectId)
+      .firstOrFail()
+  }
+
+	public async createProject(data: ProjectStoreContract): Promise<Project | null> {
 		try {
 			const project = await Project.create({
 				title: data.title,
@@ -74,7 +61,7 @@ export default class ProjectService {
 		}
 	}
 
-	public static async updateProject(data: any, project: Project) {
+	public async updateProject(data: any, project: Project) {
 		try {
 			await project.merge(data).save()
 
@@ -89,3 +76,5 @@ export default class ProjectService {
 		}
 	}
 }
+
+export default new ProjectService()

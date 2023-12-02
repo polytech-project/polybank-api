@@ -30,7 +30,8 @@
     "@adonisjs/ally",
     "@adonisjs/bouncer",
     "@adonisjs/redis",
-    "adonis-rabbit"
+    "adonis-rabbit",
+    "./services/architect/providers/architect_provider"
   ],
   "aceProviders": [
     "@adonisjs/repl"

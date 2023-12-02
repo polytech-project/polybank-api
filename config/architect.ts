@@ -1,6 +1,6 @@
-import { ArchitectConfigContract } from 'services/architect/contracts/architect_config_contract'
+import { ArchitectConfig } from '@ioc:Adonis/Core/Architect'
 
-const architectConfig: ArchitectConfigContract = {
+const architectConfig: ArchitectConfig = {
 	domains: ['users', 'projects'],
 	applications: {
 		authentication: {

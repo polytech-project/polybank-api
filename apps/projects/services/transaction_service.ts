@@ -1,15 +1,25 @@
-import Transaction from "Domains/projects/models/transaction"
-import Logger from '@ioc:Adonis/Core/Logger'
+import Expense from "Domains/projects/models/transaction"
+//import Logger from '@ioc:Adonis/Core/Logger'
 
-export default class TransactionService {
-  public static async getByProject(projectId: string, page?: number, size?: number) {
-    try {
-      return await Transaction
-        .query()
-        .where('project_id', projectId)
-        .paginate(page || 1, size || 10)
-    } catch (error) {
-      Logger.warn(error)
-    }
+class TransactionService {
+  constructor() {}
+
+  public async findAll(page: number, size: number) {
+    return Expense.query()
+      .paginate(page, size)
+  }
+
+  public async findByUserId(userId: string, page: number, size: number) {
+    return Expense.query()
+      .where('user_id', userId)
+      .paginate(page, size)
+  }
+
+  public async findById(expenseId: string) {
+    return Expense.query()
+      .where('id', expenseId)
+      .firstOrFail()
   }
 }
+
+export default new TransactionService()

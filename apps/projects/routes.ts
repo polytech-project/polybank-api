@@ -13,7 +13,8 @@ export default () => {
 			})
 			Route.group(() => {
 				Route.get('/', 'transactions_controller.index').as('transactions.index')
-			}).prefix('/:projectId')
+        Route.get('/:id', 'transactions_controller.show').as('transactions.show')
+			}).prefix('/:projectId/transactions')
 		}).middleware('auth')
 	}).namespace('App/projects/controllers')
 }

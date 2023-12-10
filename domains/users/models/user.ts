@@ -2,7 +2,9 @@ import { DateTime } from 'luxon'
 import { column, BaseModel, beforeCreate, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { randomUUID } from 'node:crypto'
 import Role from './role'
+import Hash from '@ioc:Adonis/Core/Hash'
 import Project from 'Domains/projects/models/project'
+import {beforeSave} from "@adonisjs/lucid/build/src/Orm/Decorators";
 
 export default class User extends BaseModel {
 	@column({ isPrimary: true })
@@ -16,6 +18,9 @@ export default class User extends BaseModel {
 
 	@column()
 	public rememberMeToken: string | null
+
+  @column()
+  public password: string
 
 	@column()
 	public accessToken: string | null
@@ -42,4 +47,11 @@ export default class User extends BaseModel {
 	public static async generateUuid(model: User) {
 		model.id = randomUUID()
 	}
+
+  @beforeSave()
+  public static async hashPassword(model: User) {
+    if (model.$dirty.password) {
+      model.password = await Hash.make(model.password)
+    }
+  }
 }

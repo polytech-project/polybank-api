@@ -1,60 +1,52 @@
-import { GithubDriverContract, GoogleDriverContract } from '@ioc:Adonis/Addons/Ally'
 import { type HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'Domains/users/models/user'
+import {RegisterUserValidator} from "App/authentication/validators/authentication_validator";
 
 export default class AuthenticationController {
 	public async me({ auth, response }: HttpContextContract) {
-		const user = auth.user
+		const user = auth.user as User
+    await user.load('roles', (query) => query.preload('permissions'))
 
 		return response.send(user)
 	}
 
-	public async redirect({ ally, params }: HttpContextContract) {
-		return ally
-      .use(params.driver)
-      .redirect()
-	}
+	public async login({ request, auth, response }: HttpContextContract) {
+    const email = request.input('email')
+    const password = request.input('password')
 
-	public async callback({ ally, auth, response, params, request }: HttpContextContract) {
-		const driver = ally.use(params.driver) as GithubDriverContract | GoogleDriverContract | GoogleDriverContract
+    try {
+      const token = await auth.use('api').attempt(email, password)
 
-		if (driver.accessDenied()) {
-			return 'Access was denied'
-		}
+      response.cookie('token', token.token, {
+        httpOnly: true,
+        secure: true
+      })
+      return token
+    } catch {
+      return response.unauthorized('Invalid credentials')
+    }
+  }
 
-		if (driver.stateMisMatch()) {
-			return 'Request expired. Retry again'
-		}
+  public async register({ request, response, auth }: HttpContextContract) {
+    const data = await request.validate(RegisterUserValidator)
 
-		if (driver.hasError()) {
-			return driver.getError()
-		}
+    const user = await User.create({
+      password: data.password,
+      email: data.email,
+      isVerified: true,
+      username: data.username,
+    })
 
-		const driverUser = await driver.user()
+    const token = await auth.use('api').login(user)
 
-		if (!driverUser.email) {
-			return response.badRequest('Your account must have a verified email address in order to login')
-		}
+    response.cookie('token', token.token, {
+      httpOnly: true,
+      secure: true
+    })
 
-		const user = await User.firstOrCreate(
-			{ email: driverUser.email },
-			{
-				username: driverUser.name,
-				accessToken: driverUser.token.token,
-				isVerified: driverUser.emailVerificationState === 'verified',
-				avatarUrl: driverUser.avatarUrl,
-			}
-		)
-
-		const opaqueTokenContract = await auth.use('api').login(user, {
-			expiresIn: '1day',
-		})
-
-		response.cookie('token', opaqueTokenContract.token, {
-			httpOnly: true,
-			secure: true,
-		})
-
-		response.redirect().toPath(request.header('referer') || 'http://localhost:4200')
-	}
+    return response.send({
+      user: user,
+      token: token.token
+    })
+  }
 }

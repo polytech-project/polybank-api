@@ -9,10 +9,10 @@ export default class ProjectsController {
   public projectService = ProjectService
 
 	public async index({ request, response, bouncer, auth }: HttpContextContract) {
-		const { onlyUser, page = 1, size = 10, transactions } = request.qs()
+		const { me, page = 1, size = 10, transactions } = request.qs()
     const user = auth.user as User
 
-		if (onlyUser) {
+		if (me) {
 			const projects = await this.projectService.findByUserId(user.id, page, size, !!transactions)
 
 			return response.send(projects)
@@ -47,6 +47,8 @@ export default class ProjectsController {
 		if (!project) {
 			return response.badRequest()
 		}
+
+    await project.related('users').save(user)
 
 		return response.created(project)
 	}

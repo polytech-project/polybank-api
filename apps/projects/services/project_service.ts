@@ -36,6 +36,7 @@ class ProjectService {
       .if(transactions, (query) => {
         query.preload('transactions')
       })
+      .preload('users')
       .paginate(page, size)
   }
 

@@ -42,6 +42,8 @@ class ProjectService {
   public async findById(projectId: string) {
     return Project.query()
       .where('id', projectId)
+      .preload('transactions')
+      .preload('users')
       .firstOrFail()
   }
 

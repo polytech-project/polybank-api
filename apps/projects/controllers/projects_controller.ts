@@ -3,6 +3,7 @@ import ProjectService from '../services/project_service'
 import { StoreValidator, UpdateValidator } from '../validators/project_validator'
 import User from 'Domains/users/models/user'
 import {inject} from '@adonisjs/fold'
+import Logger from "@ioc:Adonis/Core/Logger";
 
 @inject()
 export default class ProjectsController {
@@ -48,7 +49,10 @@ export default class ProjectsController {
 			return response.badRequest()
 		}
 
-    await project.related('users').save(user)
+    Logger.info(`ProjetID: ${project.id}`)
+    Logger.info(data.users, user.id)
+
+    await project.related('users').attach([...data.users, user.id])
 
 		return response.created(project)
 	}

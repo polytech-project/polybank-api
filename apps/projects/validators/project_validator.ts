@@ -8,6 +8,9 @@ export class StoreValidator {
 		title: schema.string({ trim: true, escape: true }),
 		description: schema.string.optional({ trim: true, escape: true }),
 		device: schema.string.optional({ trim: true, escape: true }),
+    users: schema.array().members(schema.string({ trim: true }, [
+      rules.exists({ table: 'users', column: 'id' })
+    ]))
 	})
 
 	public messages: CustomMessages = {}

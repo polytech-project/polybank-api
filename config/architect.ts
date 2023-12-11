@@ -11,6 +11,11 @@ const architectConfig: ArchitectConfig = {
 			prefix: 'projects',
 			as: 'projects',
 		},
+    users: {
+      prefix: '',
+      as: 'users'
+    }
+
 	},
 }
 

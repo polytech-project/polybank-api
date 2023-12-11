@@ -7,6 +7,7 @@
 
 import Bouncer from '@ioc:Adonis/Addons/Bouncer'
 import ProjectPolicy from 'App/projects/policies'
+import UserPolicy from 'App/users/policies'
 
 /*
 |--------------------------------------------------------------------------
@@ -56,5 +57,6 @@ export const { actions } = Bouncer
 |****************************************************************
 */
 export const { policies } = Bouncer.registerPolicies({
-  ...ProjectPolicy
+  ...ProjectPolicy,
+  ...UserPolicy
 })

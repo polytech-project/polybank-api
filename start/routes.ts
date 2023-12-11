@@ -22,9 +22,6 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import Rabbit from '@ioc:Adonis/Addons/Rabbit'
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-	return { hello: 'world' }
-})
 
 Route.post('/rabbit', async ({}) => {
   await Rabbit.assertQueue('test', { durable: false })
@@ -40,3 +37,18 @@ Route.post('/rabbit', async ({}) => {
   await Rabbit.sendToQueue('test', message)
   return { hello: 'world' }
 })
+
+
+Route.get('/domain', async ({ response }) => {
+  return response.send('ok')
+}).domain('api.127.0.0.1')
+
+Route
+  .group(() => {
+    Route.get('/', ({ subdomains }) => {
+      console.log(subdomains.tenant)
+      return subdomains.tenant
+    })
+  })
+  .domain(':tenant.localhost')
+

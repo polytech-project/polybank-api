@@ -47,12 +47,11 @@ export default class SocialAuthenticationController {
 
     response.cookie('token', opaqueTokenContract.token, {
       httpOnly: true,
-      secure: true,
     })
 
     Logger.info(request.header('referer')!)
 
-    response.redirect().toPath(request.header('referer') || 'http://localhost:4200')
-
+    //response.redirect().toPath(request.header('referer') || 'http://localhost:4200')
+    return response.redirect().toPath(request.header('referer') || 'http://localhost:4200')
   }
 }

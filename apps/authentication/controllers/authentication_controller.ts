@@ -18,8 +18,8 @@ export default class AuthenticationController {
       const token = await auth.use('api').attempt(email, password)
 
       response.cookie('token', token.token, {
-        httpOnly: true,
-        secure: true
+        //secure: true
+        //domain: '/dada'
       })
       return token
     } catch {

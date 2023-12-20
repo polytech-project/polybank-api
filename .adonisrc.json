@@ -29,7 +29,6 @@
     "@adonisjs/ally",
     "@adonisjs/bouncer",
     "@adonisjs/redis",
-    "adonis-rabbit",
     "./services/architect/providers/architect_provider"
   ],
   "aceProviders": [

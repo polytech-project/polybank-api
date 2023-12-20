@@ -40,7 +40,6 @@
       "@adonisjs/ally",
       "@adonisjs/bouncer",
       "@adonisjs/redis",
-      "adonis-rabbit"
     ]
   }
 }

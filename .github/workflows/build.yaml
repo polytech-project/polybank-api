@@ -17,6 +17,7 @@ on:
         required: true
         type: string
         description: "The name of the image"
+        default: "api"
       build-args:
         required: false
         type: string
@@ -136,5 +137,5 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ inputs.repository }}/${{ inputs.image-name }}:buildcache
-          cache-to: type=gha,mode=max,scope=${{ inputs.repository }}/${{ inputs.image-name }}:buildcache
+          cache-from: type=gha,scope=polytech-project/polybank-api/api:buildcache
+          cache-to: type=gha,mode=max,scope=polytech-project/polybank-api/api:buildcache

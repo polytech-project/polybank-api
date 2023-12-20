@@ -136,8 +136,8 @@ jobs:
           build-args: ${{ inputs.build-args }}
           push: true
           tags: |
-            ${{ secrets.CONTAINER_REGISTRY.ENDPOINT }}/api:latest
-            ${{ secrets.CONTAINER_REGISTRY.ENDPOINT }}/api:buildcache
+            ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/api:latest
+            ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/api:buildcache
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=polytech-project/polybank-api/api:buildcache
           cache-to: type=gha,mode=max,scope=polytech-project/polybank-api/api:buildcache

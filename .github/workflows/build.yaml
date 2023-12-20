@@ -108,11 +108,11 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/${{ inputs.image-name }}
+            ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/api
           tags: |
             latest
             buildcache
-            ${{ steps.remove-v.outputs.tag-name }}
+            1.0.0
 
       - name: Login to container registry
         uses: docker/login-action@v2
@@ -131,11 +131,8 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
-          file: ${{ inputs.dockerfile }}
+          file: ./Dockerfile
           context: .
-          build-args: ${{ inputs.build-args }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=polytech-project/polybank-api/api:buildcache
-          cache-to: type=gha,mode=max,scope=polytech-project/polybank-api/api:buildcache

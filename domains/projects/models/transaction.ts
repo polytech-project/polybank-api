@@ -1,4 +1,4 @@
-import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, BelongsTo, beforeCreate, belongsTo, column, manyToMany, ManyToMany} from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import { randomUUID } from 'node:crypto'
 import Project from 'Domains/projects/models/project'
@@ -17,6 +17,9 @@ export default class Transaction extends BaseModel {
 	@column()
 	public projectId: string
 
+  @column()
+  public type: string
+
 	@column()
 	public paidBy: string
 
@@ -24,17 +27,21 @@ export default class Transaction extends BaseModel {
 	public userId: string
 
 	@belongsTo(() => User, {
-		localKey: 'user_id',
+		localKey: 'id',
 	})
 	public user: BelongsTo<typeof User>
 
 	@belongsTo(() => User, {
-		localKey: 'paid_by',
-	})
+    localKey: 'id',
+    foreignKey: 'paidBy'
+  })
 	public paidByUser: BelongsTo<typeof User>
 
 	@belongsTo(() => Project)
 	public project: BelongsTo<typeof Project>
+
+  @manyToMany(() => User)
+  public users: ManyToMany<typeof User>
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime

@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { column, BaseModel, beforeCreate, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {column, BaseModel, beforeCreate, manyToMany, ManyToMany, hasMany, HasMany} from '@ioc:Adonis/Lucid/Orm'
 import { randomUUID } from 'node:crypto'
 import Role from './role'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Project from 'Domains/projects/models/project'
 import {beforeSave} from "@adonisjs/lucid/build/src/Orm/Decorators";
+import Transaction from "Domains/projects/models/transaction";
 
 export default class User extends BaseModel {
 	@column({ isPrimary: true })
@@ -36,6 +37,14 @@ export default class User extends BaseModel {
 
 	@manyToMany(() => Project)
 	public projects: ManyToMany<typeof Project>
+
+  @manyToMany(() => Transaction)
+  public transactions: ManyToMany<typeof Transaction>
+
+  @hasMany(() => Transaction, {
+    foreignKey: 'paidBy'
+  })
+  public transactionsPayed: HasMany<typeof Transaction>
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime

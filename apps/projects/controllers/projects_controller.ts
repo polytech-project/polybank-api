@@ -5,6 +5,34 @@ import User from 'Domains/users/models/user'
 import {inject} from '@adonisjs/fold'
 import Logger from "@ioc:Adonis/Core/Logger";
 
+function proposeRepaymenst(data: {id: string, username: string, amount: string}[]) {
+  // Triez les utilisateurs par montant croissant
+  const sortedUsers = data.slice().sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount))
+
+  const balances: Record<string, number> = {}
+  sortedUsers.forEach(user => (balances[user.id] = parseFloat(user.amount)))
+
+  const repayments: { from: string, to: string, amount: number }[] = []
+
+  for (const user of sortedUsers) {
+    while (balances[user.id] < 0) {
+      const recipient = sortedUsers.find(recipient => balances[recipient.id] > 0)
+
+      if (!recipient) {
+        break; // Aucun utilisateur à rembourser
+      }
+
+      const amount = Math.min(-balances[user.id], balances[recipient.id])
+
+      balances[user.id] += amount
+      balances[recipient.id] -= amount
+
+      repayments.push({ from: recipient.username, to: user.username, amount })
+    }
+  }
+
+  return repayments
+}
 @inject()
 export default class ProjectsController {
   public projectService = ProjectService
@@ -27,7 +55,7 @@ export default class ProjectsController {
 
 	public async show({ params, response, bouncer }: HttpContextContract) {
 		const project = await this.projectService.findById(params.id)
-		await bouncer.with('ProjectPolicy').authorize('view', project || undefined)
+		await bouncer.with('ProjectPolicy').authorize('view', project.project || undefined)
 
 		if (!project) {
 			return response.notFound()
@@ -35,6 +63,37 @@ export default class ProjectsController {
 
 		return response.send(project)
 	}
+
+  public async stats({ params, response }: HttpContextContract) {
+    const {project} = await this.projectService.findById(params.id)
+
+    const balances = project.users.map((user) => {
+      let amount = 0
+      project.transactions.forEach((transaction) => {
+        const usersIds = transaction.users.map(u => u.id)
+        if (transaction.paidBy === user.id) {
+          amount += transaction.amount
+        }
+
+        if (usersIds.includes(user.id)) {
+          amount -= transaction.amount / transaction.users.length
+        }
+      })
+
+      return {
+        id: user.id,
+        username: user.username,
+        amount: amount.toFixed(2)
+      }
+    })
+
+
+
+    return response.send({
+      balances,
+      remboursements: proposeRepaymenst(balances)
+    })
+  }
 
 	public async store({ request, response, auth }: HttpContextContract) {
 		const data = await request.validate(StoreValidator)
@@ -59,7 +118,7 @@ export default class ProjectsController {
 
 	public async update({ request, params, response, bouncer }: HttpContextContract) {
 		const data = await request.validate(UpdateValidator)
-		const project = await this.projectService.findById(params.id)
+		const {project} = await this.projectService.findById(params.id)
 
 		if (!project) {
 			return response.notFound()
@@ -73,7 +132,7 @@ export default class ProjectsController {
 	}
 
 	public async delete({ params, response, bouncer }: HttpContextContract) {
-		const project = await this.projectService.findById(params.id)
+		const {project} = await this.projectService.findById(params.id)
 
 		if (!project) {
 			return response.notFound()

@@ -1,6 +1,8 @@
 import Project from 'Domains/projects/models/project'
 import Logger from '@ioc:Adonis/Core/Logger'
 import User from 'Domains/users/models/user'
+import {inject} from "@adonisjs/fold";
+import BalanceService from "App/projects/services/balance_service";
 
 export interface ProjectStoreContract {
 	title: string
@@ -15,7 +17,9 @@ export interface ProjectUpdateContract {
 	users?: string[]
 }
 
+@inject()
 class ProjectService {
+  private balanceService = BalanceService
   constructor() {}
 
   public async findAll(page: number, size: number, transactions?: boolean) {
@@ -41,11 +45,22 @@ class ProjectService {
   }
 
   public async findById(projectId: string) {
-    return Project.query()
+    const project = await Project.query()
       .where('id', projectId)
-      .preload('transactions')
+      .preload('transactions', (query) => {
+        query.preload('paidByUser')
+        query.preload('users')
+        query.orderBy('created_at', 'desc')
+      })
       .preload('users')
       .firstOrFail()
+
+    const balances = await this.balanceService.findByProject(project)
+
+    const expenses = project.transactions.reduce((acc, curr) => acc += curr.amount, 0)
+    console.log(balances, expenses)
+
+    return { project, expenses, balances }
   }
 
 	public async createProject(data: ProjectStoreContract): Promise<Project | null> {

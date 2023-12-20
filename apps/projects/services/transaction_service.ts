@@ -1,6 +1,15 @@
 import Transaction from "Domains/projects/models/transaction"
 //import Logger from '@ioc:Adonis/Core/Logger'
 
+interface CreateTransactionDTO {
+  title: string
+  amount: number
+  paid_by: string
+  project_id: string
+  user_id: string
+  users: string[]
+}
+
 class TransactionService {
   constructor() {}
 
@@ -25,6 +34,18 @@ class TransactionService {
     return Transaction.query()
       .where('project_id', projectId)
       .paginate(page, size)
+  }
+
+  public async createTransaction(data: CreateTransactionDTO): Promise<Transaction> {
+    const transaction = await Transaction.create({
+      ...data,
+      projectId: data.project_id,
+      type: 'expense'
+    })
+
+    await transaction.related('users').sync(data.users)
+
+    return transaction
   }
 }
 

@@ -1,21 +1,22 @@
 import { type HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import {inject} from '@adonisjs/fold'
 import TransactionService from '../services/transaction_service'
+import ProjectService from "App/projects/services/project_service";
+import {CreateTransactionValidator} from "App/projects/validators/transaction_validator";
 
 @inject()
 export default class TransactionsController {
   public transactionService = TransactionService
+  public projectService = ProjectService
 
-  public async index ({ request, response, bouncer, auth }: HttpContextContract) {
-    const { me, page = 1, size = 10 } = request.qs()
 
-    if (me) {
-      const transactions = await this.transactionService.findByUserId(auth.user!.id, page, size)
-      return response.send(transactions)
-    }
+  public async index({ request, params, response, bouncer }: HttpContextContract) {
+    const { page = 1, size = 10 } = request.qs()
+    const { project } = await this.projectService.findById(params.projectId)
 
-    await bouncer.with('TransactionPolicy').authorize('view')
-    const transactions = await this.transactionService.findAll(page, size)
+    await bouncer.with('ProjectPolicy').authorize('view', project)
+
+    const transactions = await this.transactionService.findByProjectId(project.id, page, size)
 
     return response.send(transactions)
   }
@@ -28,7 +29,20 @@ export default class TransactionsController {
     return response.send(transaction)
   }
 
-  public async store ({ }: HttpContextContract) {}
+  public async store ({ request, bouncer, params, auth, response }: HttpContextContract) {
+    const data = await request.validate(CreateTransactionValidator)
+    const project = await this.projectService.findById(params.projectId)
+
+    await bouncer.with('ProjectPolicy').authorize('view', project.project)
+
+    const transaction = await this.transactionService.createTransaction({
+      ...data,
+      project_id: project.project.id,
+      user_id: auth.user!.id
+    })
+
+    return response.send(transaction)
+  }
 
   public async update ({ }: HttpContextContract) {}
 

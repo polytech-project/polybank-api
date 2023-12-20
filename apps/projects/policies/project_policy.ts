@@ -11,8 +11,11 @@ export default class ProjectPolicy extends BasePolicy {
 
   public async view(user: User, project?: Project) {
     const permissions: string[] = await HelperPolicy.getPermissions(user)
+    await user.load('projects')
 
-    if (project && project.ownerId === user.id) {
+    const ids = user.projects.map((p) => p.id)
+
+    if (project && (project.ownerId === user.id || ids.includes(project.id))) {
       return true
     }
 

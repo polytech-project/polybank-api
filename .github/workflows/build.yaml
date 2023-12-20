@@ -58,7 +58,7 @@ jobs:
 
       - name: Debug Tags
         run: |
-          echo "Tags: ${{ steps.meta.outputs.tags }}"
+          echo "Tags: ${{ steps.remove-v.outputs.tag-name }}"
 
       - name: Build and Push
         uses: docker/build-push-action@v5

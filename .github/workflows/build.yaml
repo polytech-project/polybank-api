@@ -134,5 +134,5 @@ jobs:
           file: ./Dockerfile
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: polybank/${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

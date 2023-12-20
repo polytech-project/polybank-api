@@ -1,6 +1,73 @@
 name: Build image
 
 on:
+  workflow_call:
+    inputs:
+      dockerfile:
+        description: "The path to the Dockerfile"
+        required: false
+        type: string
+        default: "Dockerfile"
+      context:
+        description: "The build directory of the image"
+        required: false
+        type: string
+        default: "."
+      image-name:
+        required: true
+        type: string
+        description: "The name of the image"
+      build-args:
+        required: false
+        type: string
+        description: "List of build args"
+      tag:
+        required: false
+        type: string
+        description: "The git tag to checkout"
+      repository:
+        required: false
+        type: string
+        description: "The repository to checkout"
+
+    secrets:
+      CONTAINER_REGISTRY_TOKEN:
+        required: true
+      CONTAINER_REGISTRY_USERNAME:
+        required: true
+      CONTAINER_REGISTRY_ENDPOINT:
+        required: true
+      PAT:
+        required: true
+
+  workflow_dispatch:
+    inputs:
+      dockerfile:
+        description: "The path to the Dockerfile"
+        required: false
+        type: string
+        default: "Dockerfile"
+      context:
+        description: "The build directory of the image"
+        required: false
+        type: string
+        default: "."
+      image-name:
+        required: true
+        type: string
+        description: "The name of the image"
+      build-args:
+        required: false
+        type: string
+        description: "List of build args"
+      tag:
+        required: false
+        type: string
+        description: "The git tag to checkout"
+      repository:
+        required: true
+        type: string
+        description: "The repository to checkout"
   push:
     tags:
       - '*'

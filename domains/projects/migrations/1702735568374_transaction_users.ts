@@ -10,10 +10,12 @@ export default class extends BaseSchema {
       table.string('transaction_id')
         .references('id')
         .inTable('transactions')
+        .onDelete('CASCADE')
 
       table.string('user_id')
         .references('id')
         .inTable('users')
+        .onDelete('CASCADE')
 
       table.unique(['transaction_id', 'user_id'])
 

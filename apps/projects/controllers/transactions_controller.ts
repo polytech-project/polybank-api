@@ -31,13 +31,13 @@ export default class TransactionsController {
 
   public async store ({ request, bouncer, params, auth, response }: HttpContextContract) {
     const data = await request.validate(CreateTransactionValidator)
-    const project = await this.projectService.findById(params.projectId)
+    const { project } = await this.projectService.findById(params.projectId)
 
-    await bouncer.with('ProjectPolicy').authorize('view', project.project)
+    await bouncer.with('ProjectPolicy').authorize('view', project)
 
     const transaction = await this.transactionService.createTransaction({
       ...data,
-      project_id: project.project.id,
+      project_id: project.id,
       user_id: auth.user!.id
     })
 

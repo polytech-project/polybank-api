@@ -19,6 +19,6 @@ export default () => {
         Route.post('/', 'transactions_controller.store').as('transactions.store')
 			}).prefix('/:projectId/transactions')
 
-		}).middleware('auth')
+		}).middleware(['auth', 'throttle:global'])
 	}).namespace('App/projects/controllers')
 }

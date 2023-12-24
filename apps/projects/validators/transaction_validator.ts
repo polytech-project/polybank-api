@@ -7,6 +7,7 @@ export class CreateTransactionValidator {
   public schema = schema.create({
     title: schema.string({ trim: true, escape: true }),
     amount: schema.number(),
+    type: schema.string(),
     paid_by: schema.string({ trim: true }, [
       rules.exists({ table: 'users', column: 'id' })
     ]),

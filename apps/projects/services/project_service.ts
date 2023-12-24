@@ -58,7 +58,6 @@ class ProjectService {
     const balances = await this.balanceService.findByProject(project)
 
     const expenses = project.transactions.reduce((acc, curr) => acc += curr.amount, 0)
-    console.log(balances, expenses)
 
     return { project, expenses, balances }
   }

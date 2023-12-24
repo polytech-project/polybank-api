@@ -27,6 +27,8 @@ class TransactionService {
   public async findById(expenseId: string) {
     return Transaction.query()
       .where('id', expenseId)
+      .preload('users')
+      .preload('paidByUser')
       .firstOrFail()
   }
 

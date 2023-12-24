@@ -11,6 +11,6 @@ export default () => {
 
 		Route.group(() => {
 			Route.get('/me', 'authentication_controller.me').as('auth.me')
-		}).middleware('auth')
+		}).middleware(['auth', 'throttle:global'])
 	}).namespace('App/authentication/controllers')
 }

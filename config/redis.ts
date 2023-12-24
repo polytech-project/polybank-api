@@ -36,14 +36,11 @@ export default redisConfig({
     |
     */
     local: {
-      sentinels: [
-        { host: Env.get('REDIS_HOST'), port: Env.get('REDIS_SENTINEL_PORT') }
-      ],
-      name: Env.get('REDIS_SENTINEL_MASTER_NAME'),
-
-      password: Env.get('REDIS_PASSWORD'),
-      sentinelPassword: Env.get('REDIS_SENTINEL_PASSWORD'),
+      host: Env.get('REDIS_HOST'),
       port: Env.get('REDIS_PORT'),
+      password: Env.get('REDIS_PASSWORD', ''),
+      db: 0,
+      keyPrefix: '',
       healthCheck: true
     },
   },

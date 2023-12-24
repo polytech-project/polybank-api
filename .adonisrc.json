@@ -19,7 +19,8 @@
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    "./start/bouncer"
+    "./start/bouncer",
+    "./start/limiter"
   ],
   "providers": [
     "./providers/app_provider",
@@ -29,7 +30,8 @@
     "@adonisjs/ally",
     "@adonisjs/bouncer",
     "@adonisjs/redis",
-    "./services/architect/providers/architect_provider"
+    "./services/architect/providers/architect_provider",
+    "@adonisjs/limiter"
   ],
   "aceProviders": [
     "@adonisjs/repl"

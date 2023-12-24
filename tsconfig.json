@@ -40,6 +40,7 @@
       "@adonisjs/ally",
       "@adonisjs/bouncer",
       "@adonisjs/redis",
+      "@adonisjs/limiter"
     ]
   }
 }

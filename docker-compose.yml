@@ -32,38 +32,19 @@ services:
     networks:
       - polybank
   redis:
-    image: bitnami/redis-sentinel:5.0
+    image: bitnami/redis:latest
     environment:
       - REDIS_REPLICATION_MODE=master
       - REDIS_PASSWORD=password
     ports:
       - '6379:6379'
-    networks:
-      - polybank
-  redis-slave:
-    image: 'bitnami/redis:latest'
-    environment:
-      - REDIS_REPLICATION_MODE=slave
-      - REDIS_MASTER_HOST=redis
-      - REDIS_MASTER_PASSWORD=password
-      - REDIS_PASSWORD=password
-    ports:
-      - '6379'
-    depends_on:
-      - redis
-    networks:
-      - polybank
-  redis-sentinel:
-    image: 'bitnami/redis-sentinel:latest'
-    environment:
-      - REDIS_MASTER_PASSWORD=password
-    depends_on:
-      - redis
-      - redis-slave
-    ports:
-      - '26381:26381'
+    volumes:
+      - redis_volume:/var/lib/redis/data
     networks:
       - polybank
 
+
+
 volumes:
   postgres_volume:
+  redis_volume:

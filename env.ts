@@ -23,9 +23,6 @@ export default Env.rules({
 	NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
 
   REDIS_CONNECTION: Env.schema.enum(['local'] as const),
-  REDIS_SENTINEL_PORT: Env.schema.number(),
-  REDIS_SENTINEL_PASSWORD: Env.schema.string(),
-  REDIS_SENTINEL_MASTER_NAME: Env.schema.string(),
   REDIS_HOST: Env.schema.string({ format: 'host' }),
   REDIS_PORT: Env.schema.number(),
   REDIS_PASSWORD: Env.schema.string(),

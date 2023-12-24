@@ -5,5 +5,7 @@ export default () => {
     Route.group(() => {
       Route.get('/', 'users_controller.index').as('users.index')
     }).prefix('/users')
-  }).namespace('App/users/controllers').middleware('auth')
+  })
+    .middleware(['auth', 'throttle:global'])
+    .namespace('App/users/controllers').middleware('auth')
 }

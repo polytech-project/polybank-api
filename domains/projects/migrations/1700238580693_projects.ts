@@ -6,9 +6,11 @@ export default class extends BaseSchema {
 	public async up() {
 		this.schema.createTable(this.tableName, (table) => {
 			table.string('id').primary()
-			table.string('title')
+			table.string('title').notNullable()
 			table.string('description')
 			table.string('device')
+      table.boolean('archived').defaultTo(false)
+      table.string('type').notNullable()
 			table.string('owner_id').references('id').inTable('users').onDelete('CASCADE')
 
 			table.timestamp('created_at', { useTz: true })

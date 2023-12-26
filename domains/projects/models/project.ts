@@ -13,6 +13,7 @@ import User from 'Domains/users/models/user'
 import { DateTime } from 'luxon'
 import { randomUUID } from 'node:crypto'
 import Transaction from './transaction'
+import {computed} from "@adonisjs/lucid/build/src/Orm/Decorators";
 
 export default class Project extends BaseModel {
 	@column({ isPrimary: true })
@@ -29,6 +30,42 @@ export default class Project extends BaseModel {
 
 	@column()
 	public ownerId: string
+
+  @column()
+  public archived: boolean
+
+  @column()
+  public type: string
+
+  @computed()
+  public get expense(): number {
+    return this.transactions.filter((t) => t.type = 'expense')
+      .reduce((acc, curr) => acc += curr.amount, 0)
+  }
+
+  @computed()
+  public get refunds() {
+    return this.users.map((user) => {
+      let amount = 0
+      this.transactions.forEach((transaction) => {
+        const userIds = transaction.users.map(u => u.id)
+
+        if (transaction.paidBy === user.id) {
+          amount += transaction.amount
+        }
+
+        if (userIds.includes(user.id)) {
+          amount -= transaction.amount / transaction.users.length
+        }
+      })
+
+      return {
+        id: user.id,
+        username: user.username,
+        amount: amount
+      }
+    })
+  }
 
 	@belongsTo(() => User, { localKey: 'owner_id' })
 	public owner: BelongsTo<typeof User>

@@ -1,7 +1,8 @@
 import { type HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import { GithubDriverContract, GoogleDriverContract } from '@ioc:Adonis/Addons/Ally'
-import User from "Domains/users/models/user";
-import Logger from "@ioc:Adonis/Core/Logger";
+import User from "Domains/users/models/user"
+import Logger from "@ioc:Adonis/Core/Logger"
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class SocialAuthenticationController {
   public async redirect({ ally, params }: HttpContextContract) {
@@ -49,9 +50,7 @@ export default class SocialAuthenticationController {
       httpOnly: true,
     })
 
-    Logger.info(request.header('referer')!)
-
     //response.redirect().toPath(request.header('referer') || 'http://localhost:4200')
-    return response.redirect().toPath(request.header('referer') || 'http://localhost:4200')
+    return response.redirect().toPath(Env.get('FRONTEND_URL'))
   }
 }

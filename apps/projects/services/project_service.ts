@@ -37,8 +37,8 @@ class ProjectService {
       .whereHas('users', (query) => {
         query.where('user_id', userId)
       })
-      .if(transactions, (query) => {
-        query.preload('transactions')
+      .preload('transactions', (query) => {
+        query.preload('users')
       })
       .preload('users')
       .paginate(page, size)
@@ -69,6 +69,7 @@ class ProjectService {
 				description: data.description,
 				device: data.device,
 				ownerId: data.user.id,
+        type: 'N/A',
 			})
 
 			return project

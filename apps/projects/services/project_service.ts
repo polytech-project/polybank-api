@@ -31,7 +31,7 @@ class ProjectService {
       .paginate(page || 1, size || 1)
   }
 
-  public async findByUserId(userId: string, page: number, size: number, transactions?: boolean) {
+  public async findByUserId(userId: string, page: number, size: number) {
     return await Project
       .query()
       .whereHas('users', (query) => {

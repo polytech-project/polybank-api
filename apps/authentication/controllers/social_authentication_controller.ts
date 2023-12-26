@@ -1,7 +1,6 @@
 import { type HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import { GithubDriverContract, GoogleDriverContract } from '@ioc:Adonis/Addons/Ally'
 import User from "Domains/users/models/user"
-import Logger from "@ioc:Adonis/Core/Logger"
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class SocialAuthenticationController {
@@ -11,7 +10,7 @@ export default class SocialAuthenticationController {
       .redirect()
   }
 
-  public async callback({ ally, auth, response, params, request }: HttpContextContract) {
+  public async callback({ ally, auth, response, params }: HttpContextContract) {
     const driver = ally.use(params.driver) as GithubDriverContract | GoogleDriverContract
 
     if (driver.accessDenied()) {

@@ -42,7 +42,7 @@ export default class ProjectsController {
     const user = auth.user as User
 
 		if (me) {
-			const projects = await this.projectService.findByUserId(user.id, page, size, !!transactions)
+			const projects = await this.projectService.findByUserId(user.id, page, size)
 
 			return response.send(projects)
 		}

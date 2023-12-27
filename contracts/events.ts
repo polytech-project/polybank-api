@@ -18,10 +18,10 @@ declare module '@ioc:Adonis/Core/Event' {
   | For example:
   |
   | interface EventsList {
-  |   'new:user': UserModel
+  |   'news:user': UserModel
   | }
   |
-  | Now calling `Event.emit('new:user')` will statically ensure that passed value is
+  | Now calling `Event.emit('news:user')` will statically ensure that passed value is
   | an instance of the the UserModel only.
   |
   */

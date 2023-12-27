@@ -28,4 +28,5 @@ export default Env.rules({
   REDIS_PASSWORD: Env.schema.string(),
 
   FRONTEND_URL: Env.schema.string(),
+  API_URL: Env.schema.string(),
 })

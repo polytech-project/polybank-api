@@ -72,6 +72,7 @@ class ProjectService {
         type: 'N/A',
 			})
 
+
 			return project
 		} catch (error) {
 			Logger.warn(error)

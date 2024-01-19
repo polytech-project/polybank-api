@@ -6,8 +6,13 @@ import NewsService from "App/news/services/news_service";
 @inject()
 export default class NewsController {
   private newsService = NewsService
-  public async index({}: HttpContextContract) {
+  public async index({ response, request }: HttpContextContract) {
+    const { actif } = request.qs()
+    const news = await this.newsService.findAll({
+      actif: !!actif
+    })
 
+    return response.send(news)
   }
 
   public async store ({ request, response }: HttpContextContract) {

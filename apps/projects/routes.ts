@@ -7,6 +7,7 @@ export default () => {
 				Route.get('/', 'projects_controller.index').as('projects.index')
 				Route.get('/:id', 'projects_controller.show').as('projects.show')
         Route.get('/:id/stats', 'projects_controller.stats').as('projects.stats')
+				Route.get('/:id/refunds', 'refunds_controller.show').as('projects.refunds')
 
 				Route.post('/', 'projects_controller.store').as('projects.store')
 				Route.put('/:id', 'projects_controller.update').as('projects.update')

@@ -31,6 +31,11 @@ export default class TransactionsController {
 
   public async store ({ request, bouncer, params, auth, response }: HttpContextContract) {
     const data = await request.validate(CreateTransactionValidator)
+
+    if (!data.users.length) {
+      return response.badRequest('no users give')
+    }
+    
     const { project } = await this.projectService.findById(params.projectId)
 
     await bouncer.with('ProjectPolicy').authorize('view', project)

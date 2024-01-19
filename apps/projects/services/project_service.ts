@@ -22,11 +22,16 @@ class ProjectService {
   private balanceService = BalanceService
   constructor() {}
 
-  public async findAll(page: number, size: number, transactions?: boolean) {
+  public async findAll(page: number, size: number, transactions?: boolean, users?: boolean) {
     return await Project
       .query()
       .if(transactions, (query) => {
-        query.preload('transactions')
+        query.preload('transactions', (query) => {
+          query.preload('users')
+        })
+      })
+      .if(users, (query) => {
+        query.preload('users')
       })
       .paginate(page || 1, size || 1)
   }

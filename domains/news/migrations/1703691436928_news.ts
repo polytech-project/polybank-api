@@ -9,6 +9,10 @@ export default class extends BaseSchema {
       table.string('title').notNullable()
       table.text('content')
       table.string('picture')
+      table.integer('priority').defaultTo(1)
+
+      table.timestamp('start_date', { useTz: true })
+      table.timestamp('end_date', { useTz: true })
 
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

@@ -38,7 +38,7 @@ export default class ProjectsController {
   public projectService = ProjectService
 
 	public async index({ request, response, bouncer, auth }: HttpContextContract) {
-		const { me, page = 1, size = 10, transactions } = request.qs()
+		const { me, page = 1, size = 10, transactions, users } = request.qs()
     const user = auth.user as User
 
 		if (me) {
@@ -49,7 +49,7 @@ export default class ProjectsController {
 
     await bouncer.with('ProjectPolicy').authorize('view')
 
-		const projects = await this.projectService.findAll(page, size, !!transactions)
+		const projects = await this.projectService.findAll(page, size, !!transactions, !!users)
 		return response.send(projects)
 	}
 

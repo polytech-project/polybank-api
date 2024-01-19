@@ -42,7 +42,8 @@ export default class SocialAuthenticationController {
     )
 
     const opaqueTokenContract = await auth.use('api').login(user, {
-      expiresIn: '1 days',
+      expiresIn: '1 day',
+
     })
 
     response.cookie('token', opaqueTokenContract.token, {
